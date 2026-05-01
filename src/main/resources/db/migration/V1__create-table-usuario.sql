@@ -1,0 +1,15 @@
+CREATE TYPE perfil as ENUM (
+    'ALUNO',
+    'PROFESSOR'
+);
+
+CREATE TABLE usuarios (
+    id BIGSERIAL PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    perfil perfil default 'ALUNO',
+    ativo BOOLEAN DEFAULT TRUE,
+    data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
