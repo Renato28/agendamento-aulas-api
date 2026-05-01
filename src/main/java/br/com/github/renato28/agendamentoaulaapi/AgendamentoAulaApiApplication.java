@@ -1,0 +1,13 @@
+package br.com.github.renato28.agendamentoaulaapi;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class AgendamentoAulaApiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AgendamentoAulaApiApplication.class, args);
+    }
+
+}
