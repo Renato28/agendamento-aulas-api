@@ -34,8 +34,8 @@ public class Usuario implements Serializable {
     @Column(nullable = false, length = 20)
     private Perfil perfil;
 
-    @Column(name = "criado_em", nullable = false)
-    private LocalDateTime criadoEm;
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDateTime dataCriacao;
 
     @Column(nullable = false)
     private Boolean ativo;
