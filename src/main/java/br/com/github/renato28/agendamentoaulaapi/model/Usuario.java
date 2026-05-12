@@ -40,6 +40,11 @@ public class Usuario implements Serializable {
     @Column(nullable = false)
     private Boolean ativo;
 
+    @PrePersist
+    public void prePersist(){
+        this.dataCriacao = LocalDateTime.now();
+    }
+
 
 
 }
