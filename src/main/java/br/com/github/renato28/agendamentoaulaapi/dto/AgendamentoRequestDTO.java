@@ -24,6 +24,5 @@ public class AgendamentoRequestDTO {
     private String linkReuniao;
 
 
-    public Long getHorarioId() {
-    }
 }
+
