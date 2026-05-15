@@ -33,6 +33,8 @@ public class Horario implements Serializable {
     private StatusHorario statusHorario;
 
 
+
+
 }
 
 
