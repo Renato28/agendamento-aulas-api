@@ -18,6 +18,9 @@ public class AvaliacaoRequestDTO {
     @NotNull(message = "O Professor é obrigatório")
     private Long professorId;
 
+    @NotNull(message = "O agendamento é obrigatorio")
+    private Long agendamentoId;
+
     @NotNull(message = "A nota é obrigatória")
     @Min(value = 1, message = "A nota mínima é 1")
     @Max(value = 5, message = "A nota máxima é 5")
