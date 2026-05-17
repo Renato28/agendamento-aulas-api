@@ -17,6 +17,9 @@ public class AgendamentoRequestDTO {
     @NotNull(message = "O ID do curso é obrigatório")
     private Long cursoId;
 
+    @NotNull(message = "O ID do horário é obrigatório")
+    private Long horarioId;
+
     @NotNull(message = "O status do agendamento é  obrigatório")
     private Long statusId;
 
