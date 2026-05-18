@@ -1,6 +1,7 @@
 package br.com.github.renato28.agendamentoaulaapi.service;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.UsuarioRequestDto;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.RegraDeNegocioException;
 import br.com.github.renato28.agendamentoaulaapi.model.Perfil;
 import br.com.github.renato28.agendamentoaulaapi.model.Usuario;
 import br.com.github.renato28.agendamentoaulaapi.repository.UsuarioRepository;
@@ -11,8 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -60,5 +60,21 @@ public class UsuarioServiceTest {
         verify(usuarioRepository, times(1))
         .save(any(Usuario.class));
 
+    }
+
+    @Test
+    void deveLancaExcecaoQuandoEmailJaExistir() {
+
+        UsuarioRequestDto dto = new UsuarioRequestDto();
+        dto.setEmail("renato@teste.com");
+
+        when(usuarioRepository.existsByEmail(dto.getEmail()))
+                .thenReturn(true);
+
+        assertThrows(RegraDeNegocioException.class,
+                () -> usuarioService.cadastrar(dto));
+
+        verify(usuarioRepository, never())
+                .save(any(Usuario.class));
     }
 }
