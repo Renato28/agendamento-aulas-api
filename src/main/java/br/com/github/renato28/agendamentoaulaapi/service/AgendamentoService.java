@@ -72,4 +72,11 @@ public class AgendamentoService {
 
         horarioRepository.save(horario);
     }
-}
+
+    public Agendamento cadastrar(AgendamentoRequestDTO dto) {
+        realizarAgendamento(dto);
+        return null;
+    }
+
+
+    }
