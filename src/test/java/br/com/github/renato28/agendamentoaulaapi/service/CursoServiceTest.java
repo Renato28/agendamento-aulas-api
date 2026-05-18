@@ -83,4 +83,20 @@ public class CursoServiceTest {
         verify(cursoRepository, times(1))
                 .save(any(Curso.class));
     }
+
+    @Test
+    void deveLancarExcecaoQuandoProfessorNaoEncontrado() {
+
+        CursoRequestDTO dto = new CursoRequestDTO();
+        dto.setProfessorId(1L);
+
+        when(usuarioRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ProfessorNaoEncontradoException.class,
+                () -> cursoService.cadastrar(dto));
+
+        verify(cursoRepository, never())
+                .save(any(Curso.class));
+    }
 }
