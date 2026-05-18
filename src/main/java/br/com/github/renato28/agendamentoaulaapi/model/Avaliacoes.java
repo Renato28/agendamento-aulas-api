@@ -41,4 +41,7 @@ public class Avaliacoes implements Serializable {
     public void prePersist() {
         this.dataCriacao = LocalDateTime.now();
     }
+
+    public void setAgendamento(Agendamento agendamento) {
+    }
 }
