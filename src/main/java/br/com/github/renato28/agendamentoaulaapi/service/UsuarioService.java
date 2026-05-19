@@ -17,7 +17,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Usuario cadastrar(UsuarioRequestDto dto) {
+    public void cadastrar(UsuarioRequestDto dto) {
         if (usuarioRepository.existsByEmail(dto.getEmail())) {
             throw new RegraDeNegocioException("Já existe um usuario cadastrado com este e-mail");
         }
@@ -29,6 +29,6 @@ public class UsuarioService {
                 .perfil(dto.getPerfil())
                 .ativo(true)
                 .build();
-        return usuarioRepository.save(usuario);
+        usuarioRepository.save(usuario);
     }
 }

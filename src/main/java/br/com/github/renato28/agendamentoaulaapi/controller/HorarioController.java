@@ -1,7 +1,6 @@
 package br.com.github.renato28.agendamentoaulaapi.controller;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.HorarioRequetDTO;
-import br.com.github.renato28.agendamentoaulaapi.model.Horario;
 import br.com.github.renato28.agendamentoaulaapi.service.HorarioService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -22,10 +21,10 @@ public class HorarioController {
     private final HorarioService horarioService;
 
     @GetMapping("/cadastrar")
-    public ResponseEntity<Horario> cadstrar(
+    public ResponseEntity<Void> cadstrar(
             @Valid @RequestBody HorarioRequetDTO dto) {
-        Horario horario = horarioService.cadastrar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(horario);
+        horarioService.cadastrar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

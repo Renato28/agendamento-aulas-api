@@ -1,7 +1,6 @@
 package br.com.github.renato28.agendamentoaulaapi.controller;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.AgendamentoRequestDTO;
-import br.com.github.renato28.agendamentoaulaapi.model.Agendamento;
 import br.com.github.renato28.agendamentoaulaapi.service.AgendamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,13 +22,13 @@ public class AgendamentoController {
 
     @PostMapping("/cadastrar")
 
-    public ResponseEntity<Agendamento>cadastrar(AgendamentoRequestDTO dto) {
+    public ResponseEntity<Void>cadastrar(AgendamentoRequestDTO dto) {
 
-        Agendamento agendamento = agendamentoService.cadastrar(dto);
+        agendamentoService.cadastrar(dto);
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(agendamento);
+                .status(HttpStatus.CREATED).build();
+
     }
 
 

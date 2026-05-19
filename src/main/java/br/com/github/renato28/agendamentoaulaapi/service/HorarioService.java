@@ -17,7 +17,7 @@ public class HorarioService {
     private final HorarioRepository horarioRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public Horario cadastrar(HorarioRequetDTO dto) {
+    public void cadastrar(HorarioRequetDTO dto) {
 
         Usuario professor = usuarioRepository.findById(dto.getProfessorId())
                 .orElseThrow(() -> new ProfessorNaoEncontradoException("Professor não encontrado"));
@@ -29,6 +29,6 @@ public class HorarioService {
                 .statusHorario(StatusHorario.DISPONIVEL)
                 .build();
 
-        return horarioRepository.save(horario);
+        horarioRepository.save(horario);
     }
 }

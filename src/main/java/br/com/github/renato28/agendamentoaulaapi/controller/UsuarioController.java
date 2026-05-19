@@ -1,7 +1,6 @@
 package br.com.github.renato28.agendamentoaulaapi.controller;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.UsuarioRequestDto;
-import br.com.github.renato28.agendamentoaulaapi.model.Usuario;
 import br.com.github.renato28.agendamentoaulaapi.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +19,11 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Usuario> cadastrar(@Valid @RequestBody UsuarioRequestDto dto) {
+    public ResponseEntity<Void> cadastrar(@Valid @RequestBody UsuarioRequestDto dto) {
 
-        Usuario usuario = usuarioService.cadastrar(dto);
+        usuarioService.cadastrar(dto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
 }

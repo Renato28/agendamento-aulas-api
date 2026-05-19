@@ -17,7 +17,7 @@ public class CursoService {
     private final CursoRepository cursoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public Curso cadastrar(CursoRequestDTO dto) {
+    public void cadastrar(CursoRequestDTO dto) {
 
         Usuario professor = usuarioRepository.findById(dto.getProfessorId())
                 .orElseThrow(() -> new ProfessorNaoEncontradoException("professor não encontrado"));
@@ -26,7 +26,7 @@ public class CursoService {
                 .descricao(dto.getDescricao())
                 .duracao(dto.getDuracao())
                 .preco(dto.getPreco()).professor(professor).build();
-        return cursoRepository.save(curso);
+        cursoRepository.save(curso);
     }
 
 

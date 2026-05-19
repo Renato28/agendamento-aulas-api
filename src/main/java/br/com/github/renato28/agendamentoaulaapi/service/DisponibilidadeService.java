@@ -16,7 +16,7 @@ public class DisponibilidadeService {
     private final DisponibilidadeRepository disponibilidadeRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public Disponibilidade cadastrar(DisponibilidadeRequestDTO dto) {
+    public void cadastrar(DisponibilidadeRequestDTO dto) {
 
         Usuario professor = usuarioRepository.findById(dto.getProfessorId()).orElseThrow(()
                 -> new DisponibilidadeNaoEncontradoException("Disponibilidade não encontrada"));
@@ -29,6 +29,6 @@ public class DisponibilidadeService {
                 .duracaoAula(dto.getDuracaoAula())
                 .build();
 
-        return disponibilidadeRepository.save(disponibilidade);
+       disponibilidadeRepository.save(disponibilidade);
     }
 }

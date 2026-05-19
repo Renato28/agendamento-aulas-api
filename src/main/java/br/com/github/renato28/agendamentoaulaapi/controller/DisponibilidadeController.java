@@ -1,7 +1,6 @@
 package br.com.github.renato28.agendamentoaulaapi.controller;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.DisponibilidadeRequestDTO;
-import br.com.github.renato28.agendamentoaulaapi.model.Disponibilidade;
 import br.com.github.renato28.agendamentoaulaapi.service.DisponibilidadeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,10 @@ public class DisponibilidadeController {
     private final DisponibilidadeService disponibilidadeService;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Disponibilidade> cadastrar(@Valid @RequestBody DisponibilidadeRequestDTO dto){
+    public ResponseEntity<Void> cadastrar(@Valid @RequestBody DisponibilidadeRequestDTO dto){
 
-        Disponibilidade disponibilidade = disponibilidadeService.cadastrar(dto);
+        disponibilidadeService.cadastrar(dto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(disponibilidade);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

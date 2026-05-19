@@ -23,7 +23,7 @@ public class AgendamentoService {
     private final AgendamentoRepository agendamentoRepository;
 
     @Transactional
-    public Agendamento cadastrar(AgendamentoRequestDTO request) {
+    public void cadastrar(AgendamentoRequestDTO request) {
 
         Usuario aluno = usuarioRepository.findById(request.getAlunoId())
                 .orElseThrow(() ->
