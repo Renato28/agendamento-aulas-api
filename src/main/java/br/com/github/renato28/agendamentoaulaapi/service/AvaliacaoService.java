@@ -1,6 +1,9 @@
 package br.com.github.renato28.agendamentoaulaapi.service;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.AvaliacaoRequestDTO;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.AgendamentoNaoEncontradoException;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.RegraDeNegocioException;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.UsuarioNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.model.*;
 import br.com.github.renato28.agendamentoaulaapi.repository.AgendamentoRepository;
 import br.com.github.renato28.agendamentoaulaapi.repository.AvaliacoesRepository;
@@ -18,45 +21,45 @@ public class AvaliacaoService{
     private final AvaliacoesRepository avaliacaoRepository;
 
     @Transactional
-    public void criar(AvaliacaoRequestDTO request) {
+    public void cadastrar(AvaliacaoRequestDTO request) {
 
         Usuario aluno = usuarioRepository.findById(request.getAlunoId())
                 .orElseThrow(() ->
-                        new RuntimeException("Aluno não encontrado"));
+                        new UsuarioNaoEncontradoException("Aluno não encontrado"));
 
         if (aluno.getPerfil() != Perfil.ALUNO) {
-            throw new RuntimeException(
+            throw new RegraDeNegocioException(
                     "Usuário informado não é um aluno");
         }
 
         Usuario professor = usuarioRepository.findById(request.getProfessorId())
                 .orElseThrow(() ->
-                        new RuntimeException("Professor não encontrado"));
+                        new UsuarioNaoEncontradoException("Professor não encontrado"));
 
         if (professor.getPerfil() != Perfil.PROFESSOR) {
-            throw new RuntimeException(
+            throw new RegraDeNegocioException(
                     "Usuário informado não é um professor");
         }
 
         Agendamento agendamento = agendamentoRepository
                 .findById(request.getAgendamentoId())
                 .orElseThrow(() ->
-                        new RuntimeException("Agendamento não encontrado"));
+                        new AgendamentoNaoEncontradoException("Agendamento não encontrado"));
 
         if (!agendamento.getAluno().getId().equals(aluno.getId())) {
-            throw new RuntimeException(
+            throw new RegraDeNegocioException(
                     "O agendamento não pertence ao aluno informado");
         }
 
         if (!agendamento.getProfessor().getId()
                 .equals(professor.getId())) {
 
-            throw new RuntimeException(
+            throw new RegraDeNegocioException(
                     "O agendamento não pertence ao professor informado");
         }
 
         if (agendamento.getStatus() != StatusAgendamento.CONCLUIDO) {
-            throw new RuntimeException(
+            throw new RegraDeNegocioException(
                     "Só é possível avaliar aulas concluídas");
         }
 

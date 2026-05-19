@@ -1,6 +1,9 @@
 package br.com.github.renato28.agendamentoaulaapi.service;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.AgendamentoRequestDTO;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.AgendamentoNaoEncontradoException;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.RegraDeNegocioException;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.UsuarioNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.model.*;
 import br.com.github.renato28.agendamentoaulaapi.repository.AgendamentoRepository;
 import br.com.github.renato28.agendamentoaulaapi.repository.CursoRepository;
@@ -24,25 +27,25 @@ public class AgendamentoService {
 
         Usuario aluno = usuarioRepository.findById(request.getAlunoId())
                 .orElseThrow(() ->
-                        new RuntimeException("Aluno não encontrado"));
+                        new UsuarioNaoEncontradoException("Aluno não encontrado"));
 
         if (aluno.getPerfil() != Perfil.ALUNO) {
-            throw new RuntimeException(
+            throw new RegraDeNegocioException(
                     "Usuário informado não é um aluno");
         }
 
         Usuario professor = usuarioRepository.findById(request.getProfessorId())
                 .orElseThrow(() ->
-                        new RuntimeException("Professor não encontrado"));
+                        new RegraDeNegocioException("Professor não encontrado"));
 
         if (professor.getPerfil() != Perfil.PROFESSOR) {
-            throw new RuntimeException(
+            throw new RegraDeNegocioException(
                     "Usuário informado não é um professor");
         }
 
         Curso curso = cursoRepository.findById(request.getCursoId())
                 .orElseThrow(() ->
-                        new RuntimeException("Curso não encontrado"));
+                        new RegraDeNegocioException("Curso não encontrado"));
 
         if (!curso.getProfessor().getId().equals(professor.getId())) {
             throw new RuntimeException(
@@ -73,10 +76,27 @@ public class AgendamentoService {
         horarioRepository.save(horario);
     }
 
-    public Agendamento cadastrar(AgendamentoRequestDTO dto) {
-        realizarAgendamento(dto);
-        return null;
-    }
+    public void cancelar(Long agendamentoId) {
 
+        Agendamento agendamento = agendamentoRepository
+                .findById(agendamentoId)
+                .orElseThrow(()
+                        -> new AgendamentoNaoEncontradoException("Agendamento não encontrado"));
 
+        if (agendamento.getStatus().equals(StatusAgendamento.CANCELADO)) {
+            throw new RegraDeNegocioException("Agendamento já foi cancelado");
+        }
+
+        if (agendamento.getStatus().equals(StatusAgendamento.CONCLUIDO)) {
+            throw new RegraDeNegocioException("Não é possivel cancelar uma aula concluida");
+        }
+
+        agendamento.setStatus(StatusAgendamento.CANCELADO);
+
+        agendamento.getHorario().setStatusHorario(StatusHorario.DISPONIVEL);
+
+        horarioRepository.save(agendamento.getHorario());
+
+        agendamentoRepository.save(agendamento);
     }
+}
