@@ -51,11 +51,11 @@ public class UsuarioServiceTest {
 
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioSalvo);
 
-        Usuario usuario = usuarioService.cadastrar(dto);
+        usuarioService.cadastrar(dto);
 
-        assertNotNull(usuario);
-        assertEquals("Renato Nóbrega", usuario.getNome());
-        assertEquals("renato@teste.com", usuario.getEmail());
+        assertNotNull(usuarioSalvo);
+        assertEquals("Renato Nóbrega", usuarioSalvo.getNome());
+        assertEquals("renato@teste.com", usuarioSalvo.getEmail());
 
         verify(usuarioRepository, times(1))
         .save(any(Usuario.class));

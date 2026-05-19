@@ -9,6 +9,8 @@ import br.com.github.renato28.agendamentoaulaapi.repository.CursoRepository;
 import br.com.github.renato28.agendamentoaulaapi.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,10 +32,10 @@ public class CursoServiceTest {
     private UsuarioRepository  usuarioRepository;
 
     @InjectMocks
-    private CursoService service;
-
-    @InjectMocks
     private CursoService cursoService;
+
+    @Captor
+    private ArgumentCaptor<Curso> cursoCaptor;
 
     @Test
     void deveCadastrarCursoComSucesso() {
@@ -45,44 +47,36 @@ public class CursoServiceTest {
                 .perfil(Perfil.PROFESSOR)
                 .build();
 
-        CursoRequestDTO dto = new CursoRequestDTO();
-        dto.setNome("Spring Boot");
-        dto.setDescricao("Curso de Spring Boot");
-        dto.setDuracao(40);
-        dto.setPreco(BigDecimal.valueOf(199.90));
-        dto.setProfessorId(1L);
-
-        Curso cursoSalvo = Curso.builder()
-                .id(1L)
-                .nome(dto.getNome())
-                .descricao(dto.getDescricao())
-                .duracao(dto.getDuracao())
-                .preco(dto.getPreco())
-                .professor(professor)
+        CursoRequestDTO dto = CursoRequestDTO.builder()
+                .nome("Spring Boot")
+                .descricao("Curso de Spring Boot")
+                .duracao(40)
+                .preco(BigDecimal.valueOf(199.90))
+                .professorId(1L)
                 .build();
 
         when(usuarioRepository.findById(1L))
                 .thenReturn(Optional.of(professor));
 
-        when(cursoRepository.save(any(Curso.class)))
-                .thenReturn(cursoSalvo);
-
-        Curso curso = cursoService.cadastrar(dto);
-
-        assertNotNull(curso);
-
-        assertEquals("Spring Boot", curso.getNome());
-        assertEquals("Curso de Spring Boot", curso.getDescricao());
-        assertEquals(BigDecimal.valueOf(199.9), curso.getPreco());
-
-        assertEquals(professor.getId(), curso.getProfessor().getId());
+        cursoService.cadastrar(dto);
 
         verify(usuarioRepository, times(1))
                 .findById(1L);
 
         verify(cursoRepository, times(1))
-                .save(any(Curso.class));
+                .save(cursoCaptor.capture());
+
+        Curso cursoCapturado = cursoCaptor.getValue();
+
+        assertEquals("Spring Boot", cursoCapturado.getNome());
+        assertEquals("Curso de Spring Boot", cursoCapturado.getDescricao());
+        assertEquals(40, cursoCapturado.getDuracao());
+        assertEquals(BigDecimal.valueOf(199.90), cursoCapturado.getPreco());
+
+        assertEquals(professor.getId(),
+                cursoCapturado.getProfessor().getId());
     }
+
 
     @Test
     void deveLancarExcecaoQuandoProfessorNaoEncontrado() {

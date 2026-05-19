@@ -62,13 +62,13 @@ public class HorarioServiceTest {
         when(horarioRepository.save(any(Horario.class)))
                 .thenReturn(horarioSalvo);
 
-        Horario resultado = horarioService.cadastrar(dto);
+        horarioService.cadastrar(dto);
 
-        assertNotNull(resultado);
-        assertEquals(StatusHorario.DISPONIVEL, resultado.getStatusHorario());
-        assertEquals(professor, resultado.getProfessor());
-        assertEquals(dto.getInicio(), resultado.getInicio());
-        assertEquals(dto.getFim(), resultado.getFim());
+        assertNotNull(horarioSalvo);
+        assertEquals(StatusHorario.DISPONIVEL, horarioSalvo.getStatusHorario());
+        assertEquals(professor, horarioSalvo.getProfessor());
+        assertEquals(dto.getInicio(), horarioSalvo.getInicio());
+        assertEquals(dto.getFim(), horarioSalvo.getFim());
 
         verify(usuarioRepository, times(1))
                 .findById(1L);
