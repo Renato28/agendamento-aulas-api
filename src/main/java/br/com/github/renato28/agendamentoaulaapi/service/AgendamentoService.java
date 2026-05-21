@@ -2,6 +2,7 @@ package br.com.github.renato28.agendamentoaulaapi.service;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.AgendamentoRequestDTO;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.AgendamentoNaoEncontradoException;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.HorarioNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.RegraDeNegocioException;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.UsuarioNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.model.*;
@@ -99,4 +100,46 @@ public class AgendamentoService {
 
         agendamentoRepository.save(agendamento);
     }
+
+    public void reagendar(Long agendamentoId, Long novoHorarioId) {
+
+        Agendamento agendamento = agendamentoRepository.findById(agendamentoId)
+                .orElseThrow(() -> new AgendamentoNaoEncontradoException("Agendamento não encontrado"));
+
+        if (agendamento.getStatus().equals(StatusAgendamento.CANCELADO)) {
+            throw new RegraDeNegocioException("Agendamento já foi cancelado");
+        }
+
+        if (agendamento.getStatus().equals(StatusAgendamento.CONCLUIDO)) {
+            throw new RegraDeNegocioException("Não é possivel reagendar uma aula concluida");
+        }
+
+        Horario horarioAtual = agendamento.getHorario();
+
+        Horario novoHorario = horarioRepository.findById(novoHorarioId)
+                .orElseThrow(() -> new HorarioNaoEncontradoException("Horário não encontrado"));
+
+        if (novoHorario.getStatusHorario() != StatusHorario.DISPONIVEL) {
+            throw new RegraDeNegocioException("Novo horário indisponivel");
+        }
+
+        if (!novoHorario.getProfessor().getId().equals(agendamento.getProfessor().getId())) {
+            throw new RegraDeNegocioException("O novo horário não pertence ao professor do agendamento");
+        }
+
+        horarioAtual.setStatusHorario(StatusHorario.DISPONIVEL);
+
+        novoHorario.setStatusHorario(StatusHorario.OCUPADO);
+
+        agendamento.setHorario(novoHorario);
+
+        horarioRepository.save(horarioAtual);
+        horarioRepository.save(novoHorario);
+
+        agendamentoRepository.save(agendamento);
+
+    }
+
+
+
 }
