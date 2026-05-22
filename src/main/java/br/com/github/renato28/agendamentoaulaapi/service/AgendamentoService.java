@@ -141,5 +141,49 @@ public class AgendamentoService {
     }
 
 
+    @Transactional
+    public void atualizar (Long agendamentoId, CadastroAtualizacaoDTO dto) {
+
+        // Busca o agendamento pelo ID
+        Agendamento agendamento = agendamentoRepository.findById(agendamentoId)
+                .orElseThrow(() ->
+                        new AgendamentoNaoEncontradoException("Agendamento não encontrado"));
+
+        // Busca os novos dados
+        Usuario aluno = usuarioRepository.findById(dto.getAlunoId())
+                .orElseThrow(() ->
+                        new UsuarioNaoEncontradoException("Aluno não encontrado"));
+
+        Usuario professor = usuarioRepository.findById(dto.getProfessorId())
+                .orElseThrow(() ->
+                        new UsuarioNaoEncontradoException("Professor não encontrado"));
+
+        Curso curso = cursoRepository.findById(dto.getCursoId())
+                .orElseThrow(() ->
+                        new RuntimeException("Curso não encontrado"));
+
+        Horario novoHorario = horarioRepository.findById(dto.getHorarioId())
+                .orElseThrow(() ->
+                        new RuntimeException("Horário não encontrado"));
+
+        // Libera o horário antigo
+        agendamento.getHorario().setStatusHorario(StatusHorario.DISPONIVEL);
+
+        // Ocupa o novo horário
+        novoHorario.setStatusHorario(StatusHorario.OCUPADO);
+
+        // Atualiza os dados do agendamento
+        agendamento.setAluno(aluno);
+        agendamento.setProfessor(professor);
+        agendamento.setCurso(curso);
+        agendamento.setHorario(novoHorario);
+
+        // Salva os horários
+        horarioRepository.save(agendamento.getHorario());
+        horarioRepository.save(novoHorario);
+
+        // Salva o agendamento atualizado
+        agendamentoRepository.save(agendamento);
+    }
 
 }
