@@ -22,7 +22,7 @@ public class AgendamentoController {
 
     @PostMapping("/cadastrar")
 
-    public ResponseEntity<Void> cadastrar(CadastroAtualizacaoDTO dto) {
+    public ResponseEntity<Void>cadastrar(CadastroAtualizacaoDTO dto) {
 
         agendamentoService.cadastrar(dto);
 
@@ -44,6 +44,25 @@ public class AgendamentoController {
 
         agendamentoService.reagendar(agendamentoid, novoHorarioId);
         return ResponseEntity.ok(Map.of("message", "Aula reagendada com sucesso"));
+
+    }
+
+    @PutMapping("/atualizar/{agendamentoId}")
+
+    public ResponseEntity<Map<String, String>> atualizar(
+            @PathVariable Long agendamentoId,
+
+            @RequestBody
+            CadastroAtualizacaoDTO dto) {
+
+        agendamentoService.
+
+                atualizar(agendamentoId, dto);
+
+        return ResponseEntity.
+
+                ok(
+                        Map.of("message", "agendamento atualizado com sucesso "));
 
     }
 
