@@ -1,6 +1,6 @@
 package br.com.github.renato28.agendamentoaulaapi.service;
 
-import br.com.github.renato28.agendamentoaulaapi.dto.AgendamentoRequestDTO;
+import br.com.github.renato28.agendamentoaulaapi.dto.CadastroAtualizacaoDTO;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.AgendamentoNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.HorarioNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.RegraDeNegocioException;
@@ -24,7 +24,7 @@ public class AgendamentoService {
     private final AgendamentoRepository agendamentoRepository;
 
     @Transactional
-    public void cadastrar(AgendamentoRequestDTO request) {
+    public void cadastrar(CadastroAtualizacaoDTO request) {
 
         Usuario aluno = usuarioRepository.findById(request.getAlunoId())
                 .orElseThrow(() ->
