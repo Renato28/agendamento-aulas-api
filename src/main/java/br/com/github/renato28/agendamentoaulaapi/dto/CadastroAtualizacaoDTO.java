@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AgendamentoRequestDTO {
+public class CadastroAtualizacaoDTO {
     @NotNull(message = "O ID do aluno é  obrigatório")
     private Long alunoId;
 
