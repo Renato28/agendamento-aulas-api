@@ -100,6 +100,25 @@ public class AgendamentoService {
 
         agendamentoRepository.save(agendamento);
     }
+    
+    public void concluir(Long agendamentoId) {
+
+        Agendamento agendamento = agendamentoRepository.findById(agendamentoId)
+                .orElseThrow(() -> new AgendamentoNaoEncontradoException("Agendamento não encontrado"));
+
+        if (agendamento.getStatus().equals(StatusAgendamento.CANCELADO)) {
+            throw new RegraDeNegocioException("Agendamento já foi cancelado");
+        }
+
+        if (agendamento.getStatus().equals(StatusAgendamento.CONCLUIDO)) {
+            throw new RegraDeNegocioException("Não é possive concluir uma aula concluida");
+        }
+
+        agendamento.setStatus(StatusAgendamento.CONCLUIDO);
+
+        agendamentoRepository.save(agendamento);
+
+    }
 
     public void reagendar(Long agendamentoId, Long novoHorarioId) {
 

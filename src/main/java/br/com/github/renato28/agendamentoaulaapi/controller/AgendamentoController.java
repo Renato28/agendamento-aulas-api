@@ -38,6 +38,13 @@ public class AgendamentoController {
         return ResponseEntity.ok(Map.of("message", "Agendamento atualizado com sucesso"));
     }
 
+    @PutMapping("/concluir/{agendamentoId}")
+    public ResponseEntity<Map<String, String>> concluir(@PathVariable Long agendamentoId) {
+
+        agendamentoService.concluir(agendamentoId);
+        return ResponseEntity.ok(Map.of("message", "Agendamento concluido com sucesso"));
+    }
+
 
     @PutMapping("/reagendar/{agendamentoid}/{novoHorarioId}")
     public ResponseEntity<Map<String, String>> reagendar(@PathVariable Long agendamentoid, @PathVariable Long novoHorarioId) {
