@@ -6,10 +6,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cursos")
@@ -21,8 +20,15 @@ public class CursoController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Void> cadastrar(@Valid @RequestBody CursoRequestDTO dto) {
-       cursoService.cadastrar(dto);
-       return ResponseEntity.status(HttpStatus.CREATED).build();
+        cursoService.cadastrar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Map<String, String>> atualizar
+            (@PathVariable Long id, @RequestBody CursoRequestDTO dto) {
+        cursoService.atualizar(id, dto);
+        return ResponseEntity.ok(Map.of("message", "Curso atualizado com sucesso"));
     }
 }
