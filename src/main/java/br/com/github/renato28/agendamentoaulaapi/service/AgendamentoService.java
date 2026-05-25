@@ -1,5 +1,6 @@
 package br.com.github.renato28.agendamentoaulaapi.service;
 
+import br.com.github.renato28.agendamentoaulaapi.dto.AgendamentoResponseDTO;
 import br.com.github.renato28.agendamentoaulaapi.dto.CadastroAtualizacaoDTO;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.AgendamentoNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.HorarioNaoEncontradoException;
@@ -13,6 +14,8 @@ import br.com.github.renato28.agendamentoaulaapi.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -203,6 +206,26 @@ public class AgendamentoService {
 
         // Salva o agendamento atualizado
         agendamentoRepository.save(agendamento);
+    }
+
+    public AgendamentoResponseDTO buscarPorId(Long id){
+
+        Agendamento agendameno=
+                agendamentoRepository.buscarCompletoPorId(id)
+                        .orElseThrow(()->
+                           new AgendamentoNaoEncontradoException("Agendamento nao encontrado"));
+
+        return AgendamentoResponseDTO
+                .fromEntity(agendameno);
+
+
+    }
+
+    public List<AgendamentoResponseDTO> listarTodos(){
+        return agendamentoRepository.listarCompleto()
+                .stream()
+                .map(AgendamentoResponseDTO::fromEntity)
+                .toList();
     }
 
 }
