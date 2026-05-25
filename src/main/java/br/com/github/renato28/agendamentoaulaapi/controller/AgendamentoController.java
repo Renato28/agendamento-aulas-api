@@ -22,12 +22,11 @@ public class AgendamentoController {
 
     @PostMapping("/cadastrar")
 
-    public ResponseEntity<Void>cadastrar(CadastroAtualizacaoDTO dto) {
+    public ResponseEntity<Void> cadastrar(CadastroAtualizacaoDTO dto) {
 
         agendamentoService.cadastrar(dto);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
 
@@ -56,11 +55,9 @@ public class AgendamentoController {
 
     @PutMapping("/atualizar/{agendamentoId}")
 
-    public ResponseEntity<Map<String, String>> atualizar(
-            @PathVariable Long agendamentoId,
+    public ResponseEntity<Map<String, String>> atualizar(@PathVariable Long agendamentoId,
 
-            @RequestBody
-            CadastroAtualizacaoDTO dto) {
+                                                         @RequestBody CadastroAtualizacaoDTO dto) {
 
         agendamentoService.
 
@@ -68,8 +65,7 @@ public class AgendamentoController {
 
         return ResponseEntity.
 
-                ok(
-                        Map.of("message", "agendamento atualizado com sucesso "));
+                ok(Map.of("message", "agendamento atualizado com sucesso "));
 
     }
 
