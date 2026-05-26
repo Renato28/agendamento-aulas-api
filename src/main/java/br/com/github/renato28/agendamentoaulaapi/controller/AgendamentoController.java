@@ -1,5 +1,6 @@
 package br.com.github.renato28.agendamentoaulaapi.controller;
 
+import br.com.github.renato28.agendamentoaulaapi.dto.AgendamentoResponseDTO;
 import br.com.github.renato28.agendamentoaulaapi.dto.CadastroAtualizacaoDTO;
 import br.com.github.renato28.agendamentoaulaapi.service.AgendamentoService;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -14,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/api/agendamento")
 @RequiredArgsConstructor
 
-public class AgendamentoController {
+public abstract class AgendamentoController {
 
 
     private final AgendamentoService agendamentoService;
@@ -69,6 +71,21 @@ public class AgendamentoController {
 
     }
 
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<AgendamentoResponseDTO> buscarporId(@PathVariable Long id) {
+        AgendamentoResponseDTO response = agendamentoService.buscarPorId(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<AgendamentoResponseDTO>> listarTodos() {
+
+        List<AgendamentoResponseDTO> lista =
+        agendamentoService.listarTodos();
+
+        return ResponseEntity.ok(lista);
+
+
+    }
 
 }
-
