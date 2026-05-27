@@ -1,6 +1,7 @@
 package br.com.github.renato28.agendamentoaulaapi.controller;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.CursoRequestDTO;
+import br.com.github.renato28.agendamentoaulaapi.model.Curso;
 import br.com.github.renato28.agendamentoaulaapi.service.CursoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,13 @@ public class CursoController {
             (@PathVariable Long id, @RequestBody CursoRequestDTO dto) {
         cursoService.atualizar(id, dto);
         return ResponseEntity.ok(Map.of("message", "Curso atualizado com sucesso"));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Curso> buscarPorId(@PathVariable Long id) {
+
+        Curso curso = cursoService.buscarPorId(id);
+
+        return ResponseEntity.ok(curso);
     }
 }
