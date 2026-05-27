@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,5 +40,13 @@ public class CursoController {
         Curso curso = cursoService.buscarPorId(id);
 
         return ResponseEntity.ok(curso);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Curso>> ListarTodos() {
+
+        List<Curso> cursos = cursoService.listarTodos();
+
+        return ResponseEntity.ok(cursos);
     }
 }
