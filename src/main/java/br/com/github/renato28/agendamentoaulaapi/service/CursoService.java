@@ -62,7 +62,12 @@ public class CursoService {
 
     }
 
+    public Curso buscarPorId(Long id) {
 
+        return cursoRepository.findById(id)
+                .orElseThrow(() ->
+                        new CursoNaoEncontradoException("curso não encontrado"));
+    }
 
 
 }
