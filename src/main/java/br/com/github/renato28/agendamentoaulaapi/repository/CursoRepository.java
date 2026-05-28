@@ -17,7 +17,7 @@ public interface CursoRepository extends JpaRepository<Curso, Long> {
            JOIN FETCH c.professor
            WHERE c.id = :id
            """)
-    Optional<Curso> buscarCompletoPorId(Long id);
+    Optional<Curso> buscarCompletoPorId();
 
 
     @Query("""
