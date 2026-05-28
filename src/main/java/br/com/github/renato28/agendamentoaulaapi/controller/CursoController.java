@@ -1,6 +1,7 @@
 package br.com.github.renato28.agendamentoaulaapi.controller;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.CursoRequestDTO;
+import br.com.github.renato28.agendamentoaulaapi.dto.CursoResponseDTO;
 import br.com.github.renato28.agendamentoaulaapi.model.Curso;
 import br.com.github.renato28.agendamentoaulaapi.service.CursoService;
 import jakarta.validation.Valid;
@@ -35,18 +36,17 @@ public class CursoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Curso> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<CursoResponseDTO> buscarPorId(
+            @PathVariable Long id
+    ) {
 
-        Curso curso = cursoService.buscarPorId(id);
-
-        return ResponseEntity.ok(curso);
+        return ResponseEntity.ok(
+                cursoService.buscarPorId(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Curso>> ListarTodos() {
+    public ResponseEntity<List<CursoResponseDTO>> ListarTodos() {
 
-        List<Curso> cursos = cursoService.listarTodos();
-
-        return ResponseEntity.ok(cursos);
+        return ResponseEntity.ok().body(cursoService.listarTodos());
     }
 }
