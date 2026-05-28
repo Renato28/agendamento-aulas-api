@@ -1,6 +1,7 @@
 package br.com.github.renato28.agendamentoaulaapi.service;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.CursoRequestDTO;
+import br.com.github.renato28.agendamentoaulaapi.dto.CursoResponseDTO;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.CursoNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.ProfessorNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.model.Curso;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -63,15 +66,21 @@ public class CursoService {
 
     }
 
-    public Curso buscarPorId(Long id) {
+    public CursoResponseDTO buscarPorId(Long id) {
 
-        return cursoRepository.findById(id)
+        Curso curso = cursoRepository.buscarCompletoPorId()
                 .orElseThrow(() ->
-                        new CursoNaoEncontradoException("curso não encontrado"));
+                        new CursoNaoEncontradoException("Curso não encontrado"));
+
+        return CursoResponseDTO.fromEntity(curso);
+
     }
 
-    public List<Curso> listarTodos() {
+    public List<CursoResponseDTO> listarTodos() {
 
-        return cursoRepository.findAll();
+        return cursoRepository.listarCompleto()
+                .stream()
+                .map(CursoResponseDTO::fromEntity)
+        .toList();
     }
 }
