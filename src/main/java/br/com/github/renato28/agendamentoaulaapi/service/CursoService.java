@@ -68,7 +68,7 @@ public class CursoService {
 
     public CursoResponseDTO buscarPorId(Long id) {
 
-        Curso curso = cursoRepository.buscarCompletoPorId()
+        Curso curso = cursoRepository.buscarCompletoPorId(id)
                 .orElseThrow(() ->
                         new CursoNaoEncontradoException("Curso não encontrado"));
 
