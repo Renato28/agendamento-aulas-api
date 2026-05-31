@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/disponibilidade")
@@ -19,10 +16,25 @@ public class DisponibilidadeController {
     private final DisponibilidadeService disponibilidadeService;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Void> cadastrar(@Valid @RequestBody DisponibilidadeRequestDTO dto){
+    public ResponseEntity<Void> cadastrar(@Valid @RequestBody DisponibilidadeRequestDTO dto) {
 
         disponibilidadeService.cadastrar(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> atualizar(
+            @PathVariable Long id,
+            @RequestBody DisponibilidadeRequestDTO dto
+    ) {
+
+        disponibilidadeService.atualizar(
+                id,
+                dto
+        );
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
