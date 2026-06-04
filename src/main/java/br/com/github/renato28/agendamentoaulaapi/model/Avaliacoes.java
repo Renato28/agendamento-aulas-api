@@ -34,7 +34,7 @@ public class Avaliacoes implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String comentario;
 
-    @Column(name = "datacriacao", nullable = false)
+    @Column(name = "datacriacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
     @PrePersist
@@ -42,6 +42,4 @@ public class Avaliacoes implements Serializable {
         this.dataCriacao = LocalDateTime.now();
     }
 
-    public void setAgendamento(Agendamento agendamento) {
-    }
 }
