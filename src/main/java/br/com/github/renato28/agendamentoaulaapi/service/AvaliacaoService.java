@@ -2,6 +2,7 @@ package br.com.github.renato28.agendamentoaulaapi.service;
 
 import br.com.github.renato28.agendamentoaulaapi.dto.AvaliacaoRequestDTO;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.AgendamentoNaoEncontradoException;
+import br.com.github.renato28.agendamentoaulaapi.exceptions.AvaliacaoNaoEncontradaException;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.RegraDeNegocioException;
 import br.com.github.renato28.agendamentoaulaapi.exceptions.UsuarioNaoEncontradoException;
 import br.com.github.renato28.agendamentoaulaapi.model.*;
@@ -71,5 +72,33 @@ public class AvaliacaoService{
                 .build();
 
         avaliacaoRepository.save(avaliacao);
+    }
+
+    @Transactional
+    public void atualizar(Long id, AvaliacaoRequestDTO dto) {
+
+        Avaliacoes avaliacaoExistente = avaliacaoRepository.findById(id)
+                .orElseThrow(() -> new AvaliacaoNaoEncontradaException("Avaliação não encontrada"));
+
+        Usuario aluno = usuarioRepository.findById(dto.getAlunoId())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Aluno não encontrado"));
+
+        Usuario professor = usuarioRepository.findById(dto.getProfessorId())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Professor não encontrado"));
+
+        if (dto.getNota() < 1 || dto.getNota() > 5) {
+            throw new RegraDeNegocioException("Nota deve estar entre 1 e 5");
+        }
+
+        Avaliacoes avaliacaoAtualizada =
+                Avaliacoes.builder()
+                        .id(avaliacaoExistente.getId())
+                        .aluno(aluno)
+                        .professor(professor)
+                        .nota(dto.getNota())
+                        .comentario(dto.getComentario())
+                        .dataCriacao(avaliacaoExistente.getDataCriacao())
+                        .build();
+        avaliacaoRepository.save(avaliacaoAtualizada);
     }
 }
